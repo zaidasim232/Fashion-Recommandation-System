@@ -1,6 +1,9 @@
 import streamlit as st
 import pickle as pkl
 import pandas as pd
+import os
+import zipfile
+import gdown
 
 from PIL import Image
 import os
@@ -8,8 +11,25 @@ import os
 # Sayfa Başlığı
 st.title("Moda Öneri Sistemi")
 
-#Dosyaları yükleme
+#google driveden fotoğrafları çekme yükleme
 @st.cache_resource
+def download_images():
+    if not os.path.exists("images"):
+        # Google Drive'daki images.zip dosyanızın ID'si
+        file_id = "1xRk5F3wtFflN0Okt_GFxWJExJY8QORcc"
+        url = f"https://drive.google.com/uc?id={file_id}"
+        output = "images.zip"
+
+        gdown.download(url, output, quiet=False)
+
+        with zipfile.ZipFile(output, "r") as zip_ref:
+            zip_ref.extractall(".")
+        os.remove(output)  # Zip dosyasını sil, yer kaplamasın
+
+
+download_images()
+
+#Dosyaları yükleme
 def load_files():
     df = pkl.load(open('fashion_products.pkl', 'rb'))
     tfidf_matrix = pkl.load(open('tfidf_matrix.pkl', 'rb'))
