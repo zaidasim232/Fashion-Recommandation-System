@@ -12,31 +12,22 @@ import os
 st.title("Moda Öneri Sistemi")
 
 #google driveden fotoğrafları çekme yükleme
-# Dosyaları Drive'dan indiren güvenli yapı
 @st.cache_resource
-def download_pkl_files():
-    if not os.path.exists('tfidf_matrix.pkl'):
-        # tfidf_matrix.pkl Drive ID'si
-        gdown.download(
-            'https://drive.google.com/uc?id=DRIVE_FILE_ID_1',
-            'tfidf_matrix.pkl',
-            quiet=False,
-        )
-    if not os.path.exists('fashion_products.pkl'):
-        gdown.download(
-            'https://drive.google.com/uc?id=DRIVE_FILE_ID_2',
-            'fashion_products.pkl',
-            quiet=False,
-        )
-    if not os.path.exists('fashion_recommender_model.pkl'):
-        gdown.download(
-            'https://drive.google.com/uc?id=DRIVE_FILE_ID_3',
-            'fashion_recommender_model.pkl',
-            quiet=False,
-        )
+def download_images():
+    if not os.path.exists("images"):
+        # Google Drive'daki images.zip dosyanızın ID'si
+        file_id = "1xRk5F3wtFflN0Okt_GFxWJExJY8QORcc"
+        url = f"https://drive.google.com/uc?id={file_id}"
+        output = "images.zip"
+
+        gdown.download(url, output, quiet=False)
+
+        with zipfile.ZipFile(output, "r") as zip_ref:
+            zip_ref.extractall(".")
+        os.remove(output)  # Zip dosyasını sil, yer kaplamasın
 
 
-download_pkl_files()
+download_images()
 
 #Dosyaları yükleme
 @st.cache_resource
