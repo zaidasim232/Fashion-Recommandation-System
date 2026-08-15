@@ -30,6 +30,7 @@ def download_images():
 download_images()
 
 #Dosyaları yükleme
+@st.cache_resource
 def load_files():
     df = pkl.load(open('fashion_products.pkl', 'rb'))
     tfidf_matrix = pkl.load(open('tfidf_matrix.pkl', 'rb'))
